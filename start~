@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [[ "$1" == "bootstrap" ]]; then
+   for f in bootstrap
+   do
+     chmod +x $f;
+     ./$f;
+   done
+end

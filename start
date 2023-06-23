@@ -1,0 +1,13 @@
+#!/bin/bash
+
+source release.sh
+
+if [[ ! -f ~/.screenrc ]]; then
+   for f in bootstrap/*.sh
+   do
+     chmod +x $f;
+     ./$f;
+   done
+fi
+
+ruby bin/console

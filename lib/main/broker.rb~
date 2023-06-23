@@ -1,0 +1,5 @@
+module Z4
+  def self.broker(*host)
+    
+  end
+end

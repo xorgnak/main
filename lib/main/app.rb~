@@ -1,0 +1,5 @@
+module Z4
+  def self.app
+
+  end
+end

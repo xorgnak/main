@@ -1,0 +1,8 @@
+class Action
+  def initialize a, &b
+    @action, @block = a, b
+  end
+  def run *id
+    @block.call(Z4.db(id))
+  end
+end

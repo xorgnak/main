@@ -1,0 +1,7 @@
+
+require 'irb'
+require 'irb/completion'
+
+load 'lib/main.rb'
+
+IRB.start
