@@ -25,7 +25,7 @@ module BROKER
   end
 end
 
-BROKER.begin do |pkt|
+BROKER.begin(host: ENV['BROKER']) do |pkt|
   w = pkt.payload.split(' ');
   h = { topic: pkt.topic, payload: pkt.payload, words: w }
   if Z4.topics.keys.include? pkt.topic
