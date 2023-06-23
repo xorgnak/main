@@ -1,7 +1,0 @@
-
-require 'irb'
-require 'irb/completion'
-
-require 'lib/main.rb'
-
-IRB.start
