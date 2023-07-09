@@ -9,15 +9,15 @@ mkdir ~/arduino
 
 curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh > arduino-install.sh
 
-export BINDIR=~/arduino;
-
 sh arduino-install.sh;
+
+sudo cp bin/arduino-cli /bin/arduino-cli
 
 rm arduino-install.sh;
 
 cat<<EOF>~/.arduino15/arduino-cli.yaml
 board_manager:
-  additional_urls: ["https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json"]
+  additional_urls: ["https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json", "https://github.com/Heltec-Aaron-Lee/WiFi_Kit_series/releases/download/..7/package_heltec_esp32_index.json"]
 build_cache:
   compilations_before_purge: 10
   ttl: 720h0m0s
@@ -43,6 +43,11 @@ sketch:
 updater:
   enable_notification: true
 EOF
+
+arduino-cli core update-index
+
+arduino-cli core install esp32:esp32 Heltec-esp32:esp32
+
 
 
 exit 0;

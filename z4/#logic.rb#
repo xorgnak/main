@@ -2,7 +2,7 @@
 
 
 Z4.topic('/') do |params|
-  puts %[[TOPIC] #{params}]
+  puts %[[TOPIC] #{params}]Z4.db('/')[@params['user']] = @params['']
   if params[:words][0] == 'USER'
     db('/')[params[:words][1]] = params[:words][2]
     Z4.emit(topic: params[:words][2], payload: '[Z4][client] linked.');

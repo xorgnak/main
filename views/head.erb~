@@ -1,0 +1,148 @@
+<script
+  src="https://code.jquery.com/jquery-3.7.0.min.js"
+  integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+  crossorigin="anonymous"></script>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.1.0/paho-mqtt.min.js"
+	integrity="sha512-Y5n0fbohPllOQ21fTwM/h9sQQ/1a1h5KhweGhu2zwD8lAoJnTgVa7NIrFa1bRDIMQHixtyuRV2ubIx+qWbGdDA=="
+	crossorigin="anonymous"
+	referrerpolicy="no-referrer"></script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<style>
+
+html { font-family: monospace; background-color: black; color: white; font-size: xx-small; }
+
+body { padding: 0; margin: 0; width: 100vw; height: 100vh; }
+
+#form { padding: 0; margin: 0; width: 100%; height: 100%; }
+
+</style>
+
+<script>
+
+var params = <%= JSON.generate(@params) %>;
+
+function setupIds(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+	result += characters.charAt(Math.floor(Math.random() * charactersLength));
+	counter += 1;
+    }
+    return result;
+}
+
+const client = new Paho.Client('propedicab.com', 8883, 'c' + params.net);
+
+function emit(t, p) {
+    message = new Paho.Message(p);
+    message.destinationName = t;
+    client.send(message);
+}
+
+function display(j) {
+    var pre = '<p style="background-color: ' + j.bg || 'black' + '; color: ' + j.fg || 'white' + '; border: thin solid ' + j.bd || 'white' + '; font-size: large;">';
+    var ic = '<span class="material-icons" style="font-size: large;">' + j.icon || 'send' + '</span><code>';
+    $('#output').prepend(pre + ic  + j.output + '</code></p>');
+}
+
+function output(i) {
+    $('#output').prepend('<p>' + i + '</p>');
+}
+
+function print(i) {
+    output(i);
+    console.log(i)
+}
+
+client.onConnectionLost = onConnectionLost;
+client.onMessageArrived = onMessageArrived;
+
+// connect the client
+function connect() {
+client.connect({onSuccess: onConnect});
+}
+
+function onConnect() {
+    client.subscribe(params.net + '/#');
+//    client.subscribe('#');
+    emit('/', 'USER ' + params.net );
+    x('/mqtt');
+}
+
+function onConnectionLost(responseObject) {
+    if (responseObject.errorCode !== 0) {
+	print("[mqtt][down]")
+	print(responseObject.errorMessage);
+    }
+//    if (r('/disconnect')) {
+	x('/disconnect');
+//    }
+    connect();
+}
+
+function onMessageArrived(message) {
+    console.log("[msg] ", message.destinationName, message.payloadString);
+//    print(message.destinationName);
+    print(message.payloadString);
+}
+
+function r(f) {
+    return localStorage.getItem(f);
+}
+
+function w(f, p) {
+    localStorage.setItem(f, p);
+}
+
+function x(f) {
+    print('[ev][' + f + ']');
+    return eval(r(f));
+}
+
+function ls(k) {
+    if (k) {
+	print(k + " => " + r(k));
+    } else {
+	for(var i=0, len=localStorage.length; i<len; i++) {
+	    var key = localStorage.key(i);
+	    var value = localStorage[key];
+	    print(key + " => " + value);
+	}
+    }
+}
+
+connect();
+
+function send() {
+    h = { input: $('#input').val(), net: params.net };
+    $.post('/', h, function(data) {
+	console.log('[SEND]', data);
+//	print(data.output);
+	$('#input').val('');
+    });
+}
+
+$(document).on('click', '.send', function(ev) {
+    ev.preventDefault();
+    $('#input').val($(this).val());
+    $('#send').click();
+});
+
+$(document).on('click', '#send', function(ev) {
+    ev.preventDefault();
+    send();
+});
+
+$(function() {
+	ls();
+});
+</script>
+    

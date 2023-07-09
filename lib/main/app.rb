@@ -3,6 +3,32 @@ if File.exist? "z4/app.rb"
   load "z4/app.rb"
 end
 
+class Run
+  include Z4
+  def initialize u
+    @id = u
+    @json  = { id: u, fg: 'white', bg: 'black', bd: 'black', icon: 'send' }
+  end
+  def id
+    @id
+  end
+  def dev
+    Z4::DEV
+  end
+  def erb k
+    return ERB.new(k).result(binding)
+  end
+  def run i
+    t = Time.now
+    @json[:time] = t
+    @json[:epoch] = t.to_i
+    @json[:input] = i
+    @json[:output] = %[#{self.instance_eval(i)}]
+    @json[:took] = Time.now.to_i - @json[:epoch]
+    return @json
+  end
+end
+
 module HTML
   def self.view f
 
@@ -28,37 +54,51 @@ module HTML
     tail = %[</form></body></html>]
     
     f = [top, head, mid, body, tail].join('')
-    return ERB.new(f).result(binding)
+    return f
   end
 end
 
 
 class App < WEBrick::HTTPServlet::AbstractServlet
   def get_env(r)
-    if File.exist? "views/#{r.path}.erb"
-      @view = r.path
-    else
-      @view = :index
-    end
     @path = r.path
     @query = r.query_string
     @host = r.host
     @params = r.query
     @type = r.content_type
+    if File.exist? "views/#{r.path}.erb"
+      @view = r.path
+    else
+      @view = :index
+    end
+    Z4.db('/')[@params['id']] = @params['client']
+    puts %[[GET] #{@path} #{@query} #{@host} #{@params} #{@type}]
   end
   
   def do_GET request, response
     get_env(request)
     response.status = 200
     response['Content-Type'] = @type
-    response.body = HTML.view(@view)
+    response.body = ERB.new(HTML.view(@view)).result(binding)
   end
   
   def do_POST(request, response)
     get_env(request)
     response.status = 200
-    response['Content-Type'] = @type
-    response.body = HTML.view(@view)
+    response['Content-Type'] = 'application/json'
+    
+    u = @params['id']
+    i = @params['input']
+    @h  = { id: u, fg: 'white', bg: 'black', bd: 'black', icon: 'send' }
+    
+    if /^--/.match(i)
+      @h[:output] = i.gsub('--', '');
+    else
+      @u = Run.new(u)
+      @h = @u.run(i);
+    end
+    
+    response.body = JSON.generate(@h)
   end
 end
 

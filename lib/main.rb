@@ -16,16 +16,16 @@ module Z4
   end
 end
 
+require_relative 'main/broker'
+
 require_relative 'main/db'
 
-require_relative 'main/broker'
+require_relative 'main/dev'
 
 require_relative 'main/app'
 
 require_relative 'main/logic'
 
 require_relative 'main/init'
-
-require_relative 'main/dev'
 
 include Z4

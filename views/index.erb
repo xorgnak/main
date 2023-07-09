@@ -1,1 +1,15 @@
-<p>works.</p>
+
+<h3 style='width: 100%; text-align: center; margin: 0; padding: 0;'>
+<% 10.times do |t| %>
+<button class='send' value='dev.event(5, "/buttons/<%= t %>");'><%= t %></button>
+<% end %>
+</h3>
+
+<div style='overflow-y: scroll; max-height: 80%; width: 100%;'>
+<div id='output' style='width: 100%; height: 100%;'></div>
+</div>
+
+<h3 style='width: 100%; text-align: center; position: absolute; bottom: 0; padding: 0; margin: 0;'>
+<input type='text' id='input' style='vertical-align: middle; width: 80%; font-size: x-large;'>
+<button id='send' class='material-icons' style='vertical-align: middle;'>send</button>
+</h3>
