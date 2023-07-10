@@ -32,7 +32,21 @@ module Z4
     end
     
     def self.input i
-      @@DEVS.each_pair {|k,v| v.write(i); }
+      if /.+: .*/.match(i)
+        ii = i.split(": ")
+      else
+        ii = ["/", i]
+      end
+      puts %[input: #{ii}]
+      @@DEVS.each_pair {|k,v|
+        if ENV['BROKER'] != 'localhost' && ENV['BROKER'] != nil
+          v.write(ii[1]);
+          puts %[v.write: #{ii[1]}]
+        end
+      }
+      Z4.emit(topic: "Z4#{ii[0]}", payload: ii[1])
+      puts %[publish: #{ii[0]} #{ii[1]}]
+        
     end
     
     def self.read(f)
@@ -124,6 +138,11 @@ module Z4
     def self.device k
       self.set "dev", k
     end
+
+    def self.devices
+      @@DEVS.keys.length
+    end
+
     @@DEVS = Hash.new do |h,k|
       d = Serial.new(port: k, baud: 115200)
       Process.detach(fork {

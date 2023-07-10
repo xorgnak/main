@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export BROKER='propedicab.com';
+#export BROKER='propedicab.com';
 
 export Z4_NAME='z4 tui';
 export Z4_VERSION='0.3.5';

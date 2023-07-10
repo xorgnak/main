@@ -1,27 +1,88 @@
 
-<h3 style='width: 100%; text-align: center; margin: 0; padding: 0;'>
-<% 10.times do |t| %>
-<button class='send' value='dev.event(5, "/buttons/<%= t %>");'><%= t %></button>
-<% end %>
-</h3>
+<% if @params.has_key? 'net' %>
 
 <div style='overflow-y: scroll; max-height: 80%; width: 100%;'>
 <div id='output' style='width: 100%; height: 100%;'></div>
 </div>
 
+<div id='inputs' style='position: absolute; bottom: 0; width: 100%; text-align: center;'>
+<div id='numpad'>
+<h3 style='width: 100%; text-align: center;'>
+<% ['1', '2', '3', 'A'].each do |e| %>
+<button class='send' value='dev.event(5, "/buttons/E<%= e %>");' style='margin: 0 2% 0 2%; padding: 0 2% 0 2%;'><%= e %></button>
+<% end %>
+</h3>
 
-<!--
-<div id='wall'>
-<% (ENV['Z4_WALL_ROWS'] || 8).to_i.times do |row| %>
-<% (ENV['Z4_WALL_COLS'] || 8).to_i.times do |col| %>
-<input type="color" id='pixel_<%= row %>_<%= col %>' name='pixel[<%= row %>][<%= col %>]'>
+<h3 style='width: 100%; text-align: center;'>
+<% ['4', '5', '6', 'B'].each do |e| %>
+<button class='send' value='dev.event(5, "/buttons/E<%= e %>");' style='margin: 0 2% 0 2%; padding: 0 2% 0 2%;'><%= e %></button>
 <% end %>
+</h3>
+
+<h3 style='width: 100%; text-align: center;'>
+<% ['7', '8', '9', 'C'].each do |e| %>
+<button class='send' value='dev.event(5, "/buttons/E<%= e %>");' style='margin: 0 2% 0 2%; padding: 0 2% 0 2%;'><%= e %></button>
 <% end %>
+</h3>
+
+<h3 style='width: 100%; text-align: center;'>
+<% ['*', '0', '#', 'D'].each do |e| %>
+<button class='send' value='dev.event(5, "/buttons/E<%= e %>");' style='margin: 0 2% 0 2%; padding: 0 2% 0 2%;'><%= e %></button>
+<% end %>
+</h3>
 </div>
--->
 
+<div id='macros'>
+<h3 style='width: 100%; text-align: center;'>
+<% 5.times do |t| %>
+<button class='send' value='dev.event(5, "/buttons/T<%= t %>");'>
+<span class='material-icons'>arrow_upward</span>
+<%= t %></button>
+<% end %>
+</h3>
 
-<h3 style='width: 100%; text-align: center; position: absolute; bottom: 0; padding: 0; margin: 0;'>
+<h3 style='width: 100%; text-align: center;'>
+<% 5.times do |t| %>
+<button class='send' value='dev.event(5, "/buttons/M<%= t %>");'>
+<span class='material-icons'>emoji_objects</span>
+<%= t %></button>
+<% end %>
+</h3>
+
+<h3 style='width: 100%; text-align: center;'>
+<% 5.times do |t| %>
+<button class='send' value='dev.event(5, "/buttons/B<%= t %>");'>
+<span class='material-icons'>arrow_downward</span>
+<%= t %></button>
+<% end %>
+</h3>
+</div>
+
+<div id='raw'>
+<h3 style='width: 100%; text-align: center; padding: 0; margin: 0;'>
 <input type='text' id='input' style='vertical-align: middle; width: 80%; font-size: x-large;'>
 <button id='send' class='material-icons' style='vertical-align: middle;'>send</button>
 </h3>
+</div>
+</div>
+
+<% else %>
+
+<% if @img %>
+<img src='<%= @img %>' style='width: 100%; height: 100%; z-index: -1;'>
+<% end %>
+<% if @heading %>
+<h1 style='width: 100%; text-align: center; padding: 0; margin: 0;'>
+<%= @heading %>
+</h1>
+<% else %>
+<h1 style='width: 100%; text-align: center; padding: 0; margin: 0;'>
+<%= @host %>
+</h1>
+<% end %>
+<% if @body %>
+<div style='width: 100%; text-align: center; padding: 0; margin: 0; position: absolute; bottom: 0;'>
+<%= @body %>
+</div>
+<% end %>
+<% end %>
