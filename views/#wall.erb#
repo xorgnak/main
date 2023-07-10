@@ -1,0 +1,5 @@
+<% (ENV['Z4_WALL_ROWS'] || 8).to_i.times do |row| %>
+<% (ENV['Z4_WALL_COLS'] || 8).to_i.times do |col| %>
+<input type="color" name='pixel[<%= row %>][<%= col %>]'>
+<% end %>
+<% end %>
