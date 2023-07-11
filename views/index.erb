@@ -58,14 +58,16 @@
 </h3>
 </div>
 
-<div id='raw'>
 <h3 style='width: 100%; text-align: center; padding: 0; margin: 0;'>
-<input type='text' id='input' style='vertical-align: middle; width: 80%; font-size: x-large;'>
+<select id='input_method' style='width: 15%;'>
+<option selected >&gt;</option>
+<option value='numpad'>#</option>
+<option value='macros'>*</option>
+</select>
+<input type='text' id='input' style='vertical-align: middle; width: 65%; font-size: x-large;'>
 <button id='send' class='material-icons' style='vertical-align: middle;'>send</button>
 </h3>
 </div>
-</div>
-
 <% else %>
 
 <% if @img %>

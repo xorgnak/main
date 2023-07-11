@@ -140,5 +140,11 @@ $(document).on('click', '#send', function(ev) {
     ev.preventDefault();
     send();
 });
+
+$(document).on('update', '#input_method', function(ev) {
+    $('.inputs').hide();
+    $('#' + $('#input_method').val()).show();
+});
+
 </script>
     
