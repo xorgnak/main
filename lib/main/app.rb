@@ -66,6 +66,13 @@ end
 
 
 class App < WEBrick::HTTPServlet::AbstractServlet
+
+  def frame(i)
+    o = []
+    i.split("\n").each {|e| o << %[<p>#{e}</p>]}
+    return %[<div>#{o.join("")}</div>]
+  end
+  
   def get_env(r)
     @path = r.path
     @query = r.query_string
@@ -96,7 +103,7 @@ class App < WEBrick::HTTPServlet::AbstractServlet
     u = @params['id']
     i = @params['input']
     @h  = { id: u, fg: 'white', bg: 'black', bd: 'black', icon: 'send' }
-    
+
     if /^--/.match(i)
       @h[:output] = ERB.new(i.gsub('--', '')).result(binding);
     else
