@@ -6,6 +6,7 @@
 </div>
 
 <div id='inputs' style='position: absolute; bottom: 0; width: 100%; text-align: center;'>
+<!--
 <div id='numpad' class='inputs' style='display: none;'>
 <h3 style='width: 100%; text-align: center;'>
 <% ['1','2', '3', 'A', '-'].each do |e| %>
@@ -38,7 +39,7 @@
 </h3>
 
 </div>
-
+-->
 <div id='macros' class='inputs' style='display: none;'>
 <h3 style='width: 100%; text-align: center;'>
 <% 5.times do |t| %>
@@ -67,8 +68,8 @@
 
 <h3 style='width: 100%; text-align: center; padding: 0; margin: 0;'>
 <select id='input_method' style='width: 15%;'>
-<option selected >&gt;</option>
-<option value='numpad'>#</option>
+<option selected value='raw' >&gt;</option>
+<!-- <option value='numpad'>^</option> -->
 <option value='macros'>*</option>
 </select>
 <input type='text' id='input' style='vertical-align: middle; width: 65%; font-size: x-large;'>

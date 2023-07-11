@@ -9,24 +9,6 @@ class Run
     @id = u
     @json  = { id: u, fg: 'white', bg: 'black', bd: 'black', icon: 'send' }
   end
-  def A *a
-    self.send(a)
-  end
-  def B *a
-    db.send(a)
-  end
-  def C *a
-    z4.send(a)
-  end
-  def D *a
-    dev.send(a)
-  end
-  def E *a
-    puts %[E: #{a}]
-  end
-  def F *a
-    puts %[F: #{a}]
-  end
   def id
     @id
   end
