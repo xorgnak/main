@@ -79,7 +79,7 @@ client.onMessageArrived = onMessageArrived;
 
 // connect the client
 function connect() {
-client.connect({ onSuccess: onConnect , useSSL: true });
+client.connect({ onSuccess: onConnect , useSSL: true, userName: 'u' + id, password: 'p' + id });
 }
 
 function onConnect() {
