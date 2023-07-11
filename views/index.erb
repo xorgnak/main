@@ -8,7 +8,7 @@
 <div id='inputs' style='position: absolute; bottom: 0; width: 100%; text-align: center;'>
 <div id='numpad' class='inputs' style='display: none;'>
 <h3 style='width: 100%; text-align: center;'>
-<% ['1','2', '3', 'A'].each do |e| %>
+<% ['1','2', '3', 'A', '!'].each do |e| %>
 <button class='a' value='<%= e %>' style='margin: 0 2% 0 2%; padding: 0 2% 0 2%;'><%= e %></button>
 <% end %>
 </h3>
@@ -32,7 +32,7 @@
 </h3>
 
 <h3 style='width: 100%; text-align: center;'>
-<% ['E', 'F', ',', ';', ' '].each do |e| %>
+<% ['E', 'F', ',', ';', '&nbsp'].each do |e| %>
 <button class='a' value='<%= e %>' style='margin: 0 2% 0 2%; padding: 0 2% 0 2%;'><%= e %></button>
 <% end %>
 </h3>
