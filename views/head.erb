@@ -128,7 +128,7 @@ function send() {
 $(document).on('click', '.a', function(ev) {
    ev.preventDefault();
    var v = $('#input').val();
-   $('#input').val(v + " " + $(this).val());
+   $('#input').val(v + $(this).val());
 });
 
 $(document).on('click', '.send', function(ev) {
