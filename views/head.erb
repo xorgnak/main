@@ -110,7 +110,9 @@ function onMessageArrived(message) {
     display(t, message.payloadString);
 }
 
+<% if ENV['BROKER'] != 'localhost' && ENV['BROKER'] != nil %>
 connect();
+<% end %>
 
 function send() {
     h = { input: $('#input').val(), net: params.net };
