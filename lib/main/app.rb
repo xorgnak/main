@@ -77,7 +77,7 @@ class App < WEBrick::HTTPServlet::AbstractServlet
     else
       @view = :index
     end
-    Z4.db('/')[@params['id']] = @params['client']
+    Z4.db('/')[@params['net']] = @params['client']
     puts %[[GET] #{@path} #{@query} #{@host} #{@params} #{@type}]
   end
   
@@ -98,7 +98,7 @@ class App < WEBrick::HTTPServlet::AbstractServlet
     @h  = { id: u, fg: 'white', bg: 'black', bd: 'black', icon: 'send' }
     
     if /^--/.match(i)
-      @h[:output] = i.gsub('--', '');
+      @h[:output] = ERB.new(i.gsub('--', '')).result(binding);
     else
       @u = Run.new(u)
       @h = @u.run(i);
