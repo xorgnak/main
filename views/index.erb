@@ -8,26 +8,32 @@
 <div id='inputs' style='position: absolute; bottom: 0; width: 100%; text-align: center;'>
 <div id='numpad' class='inputs' style='display: none;'>
 <h3 style='width: 100%; text-align: center;'>
-<% ['1', '2', '3', 'A'].each do |e| %>
-<button class='a' value='dev.event(5, "/buttons/E<%= e %>");' style='margin: 0 2% 0 2%; padding: 0 2% 0 2%;'><%= e %></button>
+<% ['1','2', '3', 'A'].each do |e| %>
+<button class='a' value='<%= e %>' style='margin: 0 2% 0 2%; padding: 0 2% 0 2%;'><%= e %></button>
 <% end %>
 </h3>
 
 <h3 style='width: 100%; text-align: center;'>
 <% ['4', '5', '6', 'B'].each do |e| %>
-<button class='a' value='dev.event(5, "/buttons/E<%= e %>");' style='margin: 0 2% 0 2%; padding: 0 2% 0 2%;'><%= e %></button>
+<button class='a' value='<%= e %>' style='margin: 0 2% 0 2%; padding: 0 2% 0 2%;'><%= e %></button>
 <% end %>
 </h3>
 
 <h3 style='width: 100%; text-align: center;'>
 <% ['7', '8', '9', 'C'].each do |e| %>
-<button class='a' value='dev.event(5, "/buttons/E<%= e %>");' style='margin: 0 2% 0 2%; padding: 0 2% 0 2%;'><%= e %></button>
+<button class='a' value='<%= e %>' style='margin: 0 2% 0 2%; padding: 0 2% 0 2%;'><%= e %></button>
 <% end %>
 </h3>
 
 <h3 style='width: 100%; text-align: center;'>
 <% ['*', '0', '#', 'D'].each do |e| %>
-<button class='a' value='dev.event(5, "/buttons/E<%= e %>");' style='margin: 0 2% 0 2%; padding: 0 2% 0 2%;'><%= e %></button>
+<button class='a' value='<%= e %>' style='margin: 0 2% 0 2%; padding: 0 2% 0 2%;'><%= e %></button>
+<% end %>
+</h3>
+
+<h3 style='width: 100%; text-align: center;'>
+<% ['E', 'F', ',', ';'].each do |e| %>
+<button class='a' value='<%= e %>' style='margin: 0 2% 0 2%; padding: 0 2% 0 2%;'><%= e %></button>
 <% end %>
 </h3>
 </div>
