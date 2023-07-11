@@ -53,7 +53,7 @@ function setupIds(length) {
 
 const id = setupIds(8);
 
-const client = new Paho.Client('propedicab.com', 8883, 'c' + id);
+const client = new Paho.Client('<%= ENV['BROKER'] || "localhost" %>', 8883, 'c' + id);
 
 function emit(t, p) {
     message = new Paho.Message(p);
@@ -79,7 +79,11 @@ client.onMessageArrived = onMessageArrived;
 
 // connect the client
 function connect() {
-client.connect({onSuccess: onConnect});
+client.connect({onSuccess: onConnect
+ <% if ENV['BROKER'] == nil %>
+ , useSSL: true
+ <% end %>
+});
 }
 
 function onConnect() {
