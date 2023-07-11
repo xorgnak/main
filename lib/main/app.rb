@@ -19,11 +19,17 @@ class Run
     return ERB.new(k).result(binding)
   end
   def run i
+    if m = /(.+): (.*)/.match()
+      ii = [ m[1], m[2] ]
+    else
+      ii = [ '/', i ]
+    end
     t = Time.now
     @json[:time] = t
     @json[:epoch] = t.to_i
     @json[:input] = i
-    @json[:output] = %[#{self.instance_eval(i)}]
+    @json[:target] = ii[0]
+    @json[:output] = %[#{self.instance_eval(ii[1])}]
     @json[:took] = Time.now.to_i - @json[:epoch]
     return @json
   end
