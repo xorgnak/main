@@ -19,7 +19,7 @@ class Run
     return ERB.new(k).result(binding)
   end
   def run i
-    if m = /(.+): (.*)/.match()
+    if m = /(.+): (.*)/.match(i)
       ii = [ m[1], m[2] ]
     else
       ii = [ '/', i ]
