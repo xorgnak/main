@@ -1,0 +1,12 @@
+<style>
+.check { width: 20%; height: 20%; }
+</style>
+<% @card = Bingo.card(params['user']) %>
+
+<% if @card.win? %>
+<h1>WINNER!</h1>
+<h3>You win:</h3>
+<p>...your prize...</p>
+<% else %>
+<%= @card.to_html %>
+<% end %>

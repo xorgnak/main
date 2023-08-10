@@ -1,0 +1,21 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    json (2.6.3)
+    net-telnet (0.2.0)
+    paho-mqtt (1.0.12)
+    pstore (0.1.2)
+    webrick (1.8.1)
+
+PLATFORMS
+  armv7l-linux-eabihf
+
+DEPENDENCIES
+  json
+  net-telnet
+  paho-mqtt
+  pstore
+  webrick
+
+BUNDLED WITH
+   2.5.0.dev

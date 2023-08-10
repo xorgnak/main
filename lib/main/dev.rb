@@ -144,21 +144,20 @@ module Z4
     end
 
     @@DEVS = Hash.new do |h,k|
-      d = Serial.new(port: k, baud: 115200)
-      Process.detach(fork {
-                       while(o = d.gets) do
-                         o.split("\n").each do |e|
-#                           if "#{e}".length > 0
-                             puts "#{e.strip}"
-#                           end
-                         end
-                       end
-                     });
-      h[k] = d
+      #      d = Serial.new(port: k, baud: 115200)
+      #      Process.detach(fork {
+      #                       while(o = d.gets) { o.split("\n").each { |e| puts "#{e.strip}" } }
+      #                     });
+      #      h[k] = d
+      h[k] = Net::Telnet.new('Host' => '192.168.4.1', 'Timeout' => 10, 'Prompt' => /[$%#>] \z/n)
+      h[k].cmd("hi(); ")
     end
-    Dir['/dev/ttyUSB*'].each { |e| @@DEVS[e] }
+    #Dir['/dev/ttyUSB*'].each { |e| @@DEVS[e] }
+    def self.[] k
+      @@DEVS[k]
+    end
   end
   include DEV
-  DEV.hi();
+#  DEV.hi();
 end
 

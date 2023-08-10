@@ -3,7 +3,8 @@ require 'json'
 require 'pstore'
 require 'webrick'
 require 'paho-mqtt'
-require 'ffi-serial'
+#require 'ffi-serial'
+require 'net-telnet'
 
 module Z4
   def self.every n, &b
@@ -21,6 +22,8 @@ require_relative 'main/broker'
 require_relative 'main/db'
 
 require_relative 'main/dev'
+
+require_relative 'main/bingo'
 
 require_relative 'main/app'
 

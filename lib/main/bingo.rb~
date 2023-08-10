@@ -1,0 +1,38 @@
+
+module Bingo
+  
+  class Card
+    def initialize user
+      @user = user
+      @h = Hash.new { |h,k| h[k] = {} }
+      5.times do |row|
+        5.times do |col|
+          if row == 2 && col == 2
+          # center square
+            @h[row][col] = Square.center
+          else
+            # normal square
+            @h[row][col] = Square.random
+          end
+        end
+      end
+    end
+  end
+  SQUARES = [
+    "another <%= gender %>friend",
+    "lame <%= gender %>friend",
+    "<%= rand(2..5) %> eskimo cousins."
+  ]
+  class Square
+    def initialize k
+      ERB.new(k).result(binding)
+    end
+    def self.center
+      self.new("center")
+    end
+    def self.random
+      self.new(SQUARES.sample)
+    end
+  end
+end
+

@@ -1,0 +1,25 @@
+<style>
+.card { vertical-align: middle; }
+.check { width: 20%; height: 20%; }
+.checked { background-color: red; color: white; }
+</style>
+<script>
+$(document).on('click', '.check', function(ev) { ev.preventDefault(); $(this).addClass('checked'); });
+</script>
+<% @card = Z4.bingo(@params['user']) %>
+<% @win = @card.win? %>
+<% if @win[:row] %>
+<h1>WINNER!</h1>
+<h3>You win:</h3>
+<p>...your row prize...</p>
+<% elsif @win[:col] %>
+<h1>WINNER!</h1>
+<h3>You win:</h3>
+<p>...your col prize...</p>
+<% elsif @win[:corner] %>
+<h1>CORNER WIN!!!</h1>
+<h3>You win:</h3>
+<p>...your corner prize...</p>
+<% else %>
+<%= @card.to_html %>
+<% end %>
