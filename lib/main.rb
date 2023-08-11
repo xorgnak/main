@@ -1,4 +1,4 @@
-
+require 'set'
 require 'json'
 require 'pstore'
 require 'webrick'
