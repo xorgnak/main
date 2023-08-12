@@ -20,7 +20,7 @@ function click() {
 	var id = $(e).attr('id'); var ch = $(e).hasClass('checked'); var ix = id.split('_'); game[ix[1]][ix[2]] = ch;
     });
     var cols = { "0": [], "1": [], "2": [], "3": [], "4": [] };
-    if (game[0][0] == true && game[0][4] == true && game[4][4] == true && game[4][4] == true) { tog(); }
+    if (game[0][0] == true && game[0][4] == true && game[4][0] == true && game[4][4] == true) { tog(); }
     $.each(game, function(k,v) { console.log(v);
 				 if (!v.includes(false)) { tog(); }; for (i = 0; i <= 4; i++) { cols[i][k] = v[i] } });
     $.each(cols, function(k,v) { if (!v.includes(false)) { tog(); } });
