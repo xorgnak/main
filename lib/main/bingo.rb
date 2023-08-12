@@ -75,7 +75,7 @@ module Bingo
             rr[c] = %[<button class='check' id='check_#{r}_#{c}' value='#{r}_#{c}'>#{sq.value}</button>]
           end
         end
-        o[r] = %[<p style='height: 20%; margin: 0;'>#{rr.join("")}</p>]
+        o[r] = %[<p style='height: 20vh; margin: 0;'>#{rr.join("")}</p>]
       end
       return %[<div id='card' style='width: 100%; height: 85%;'>#{o.join("")}</div>]
     end
