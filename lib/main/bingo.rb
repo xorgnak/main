@@ -77,7 +77,7 @@ module Bingo
         end
         o[r] = %[<p>#{rr.join("")}</p>]
       end
-      return %[<div class='card'>#{o.join("")}</div>]
+      return %[<div id='card'>#{o.join("")}</div>]
     end
     def to_h
       @h
