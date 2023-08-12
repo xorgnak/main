@@ -4,8 +4,35 @@
 .checked { background-color: red; color: white; }
 </style>
 <script>
-$(document).on('click', '.check', function(ev) { ev.preventDefault(); $(this).addClass('checked'); });
+var game = { "0": [], "1": [], "2": [], "3": [], "4": [] };
+var win = { row: false, col: false, corner: false };
+function click() {
+  $('.check').each(function(i, e) {
+    var id = $(e).attr('id'); var ch = $(e).hasClass('checked'); var ix = id.split('_'); game[ix[1]][ix[2]] = ch;
+  });
+  var cols = { "0": [], "1": [], "2": [], "3": [], "4": [] };
+  if (game[0][0] == true && game[0][4] == true && game[4][4] == true && game[4][4] == true) { win.corner = true; }
+  $.each(game, function(k,v) { console.log(v);
+  if (!v.includes(false)) { win.row = k; }; for (i = 0; i <= 4; i++) { cols[i][k] = v[i] } });
+  $.each(cols, function(k,v) { if (!v.includes(false) && win.row == false) { win.col = k; } });
+  console.log(win);
+  var w = false; $.each(win, function(k,v) { if (v != false) { w = k; } }); return w;
+}
+$(document).on('click', '.check', function(ev) {
+  ev.preventDefault();
+  $(this).addClass('checked');
+  var x = click();
+  if (w != false) {
+    $('#card').hide();
+    $('#win').show();
+    $('#w').text(w);
+  }
+});
 </script>
+<div id='win' style='display: none;'>
+<h1><span id='w'></span> WINNER!</h1>
+<h3 id='prize'>...your prize...</h3>
+</div>
 <% @card = Z4.bingo(@params['user']) %>
 <% @win = @card.win? %>
 <% if @win[:row] %>
