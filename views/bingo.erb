@@ -5,9 +5,10 @@
 </style>
 <div id='win' style='display: none; text-align: center; color: gold; border: thick dotted gold; height: 95%;'>
 <h1>WINNER!</h1>
-<h3 id='prize'>...your prize...</h3>
+<h3 id='prize'>This is a sample prize.  Your prize will be similar but not the same.  Everyone loves prizes.  Play again and get all the prizes.</h3>
 </div>
-<% @card = Z4.bingo(@params['user']) %>
+<% g = []; 6.times { g << rand(16).to_s(16) }; @game = g.join(''); %>    
+<% @card = Z4.bingo(@game) %>
 <%= @card.to_html %>
 <script>
     var game = { "0": [], "1": [], "2": [], "3": [], "4": [] };
