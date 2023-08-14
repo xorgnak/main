@@ -1,0 +1,10 @@
+<h1>HTML</h1>
+<ul>
+<li>html is used to define the structure of a document.</li>
+<li>it is made up of tags bounded by angle brackets and can contain attributes</li>
+<li>the html document is also used to include libraries, styles, scripts and media</li>
+<li>the most important element and only rendered portion of the html document is the contents of the body tag.</li>
+</ul>
+<h4><span class='material-icons'></span>Watch the following video to understand the basic layout of an html document:</h4>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/PlxWf493en4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
