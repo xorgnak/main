@@ -3,11 +3,27 @@ if File.exist? "z4/app.rb"
   load "z4/app.rb"
 end
 
+class Menu
+  def initialize m
+    @m = m
+    return {}
+  end
+end
 class Run
   include Z4
   def initialize u
     @id = u
     @json  = { id: u, fg: 'white', bg: 'black', bd: 'black', icon: 'send' }
+  end
+  def menu *m
+    if m[0]
+      mn = Menu.new(m[0])
+    else
+      mn = { term: "/?net=#{@id}&id=#{@id}", bingo: "/bingo?user=#{id}" }
+    end
+    o = []
+    mn.each_pair {|k,v| o << %[<a class='menu' href='#{v}'>#{k}</a>] }
+    return o.join("");
   end
   def id
     @id
@@ -106,8 +122,10 @@ class App < WEBrick::HTTPServlet::AbstractServlet
 
     if /^--/.match(i)
       @h[:output] = ERB.new(i.gsub('--', '')).result(binding);
+    elsif /^#/.match(i)
+      @h[:output] = ERB.new(i.gsub(/^#/, '')).result(binding);
     else
-      @u = Run.new(u)
+      @u = Run.new(u);
       @h = @u.run(i);
     end
     
