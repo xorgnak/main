@@ -1,64 +1,19 @@
-
-<% if @params.has_key? 'net' %>
-
-<div style='overflow-y: scroll; max-height: 80%; width: 100%;'>
-<div id='output' style='width: 100%; height: 100%;'></div>
-</div>
-
-<div id='inputs' style='position: absolute; bottom: 0; width: 100%; text-align: center;'>
-
-<div id='macros' class='inputs' style='display: none;'>
-<h3 style='width: 100%; text-align: center;'>
-<% 5.times do |t| %>
-<button class='send' value='dev.event(5, "/buttons/T<%= t %>");'>
-<span class='material-icons'>arrow_upward</span>
-<%= t %></button>
+<% if @db[:img] %>
+<img src='<%= @db[:img] %>' style='width: 100%; height: 100%; z-index: -1; position: fixed; top: 0; left: 0;'>
 <% end %>
-</h3>
 
-<h3 style='width: 100%; text-align: center;'>
-<% 5.times do |t| %>
-<button class='send' value='dev.event(5, "/buttons/M<%= t %>");'>
-<span class='material-icons'>emoji_objects</span>
-<%= t %></button>
-<% end %>
-</h3>
-
-<h3 style='width: 100%; text-align: center;'>
-<% 5.times do |t| %>
-<button class='send' value='dev.event(5, "/buttons/B<%= t %>");'>
-<span class='material-icons'>arrow_downward</span>
-<%= t %></button>
-<% end %>
-</h3>
-</div>
-
-<h3 style='width: 100%; text-align: center; padding: 0; margin: 0;'>
-<select id='input_method' style='width: 10%; font-size: x-large; vertical-align: middle;'>
-<option selected value='raw' >&gt;</option>
-<option value='macros'>^</option>
-</select>
-<input type='text' id='input' style='vertical-align: middle; width: 70%; font-size: x-large;'>
-<button id='send' class='material-icons' style='vertical-align: middle;'>send</button>
-</h3>
-</div>
-<% else %>
-
-<% if @img %>
-<img src='<%= @img %>' style='width: 100%; height: 100%; z-index: -1;'>
-<% end %>
-<% if @heading %>
+<% if @db[:heading] %>
 <h1 style='width: 100%; text-align: center; padding: 0; margin: 0;'>
-<%= @heading %>
+<%= @db[:heading] %>
 </h1>
 <% else %>
 <h1 style='width: 100%; text-align: center; padding: 0; margin: 0;'>
 <%= @host %>
 </h1>
 <% end %>
-<% if @body %>
+
+<% if @db[:body] %>
 <div style='width: 100%; text-align: center; padding: 0; margin: 0; position: absolute; bottom: 0;'>
-<%= @body %>
+<%= @db[:body] %>
 </div>
-<% end %>
 <% end %>

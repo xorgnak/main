@@ -13,27 +13,100 @@ class Run
   include Z4
   def initialize u
     @id = u
-    @json  = { id: u, fg: 'white', bg: 'black', bd: 'black', icon: 'send' }
+    @home = "usr/#{@id}"
+
+    if !Dir.exist? @home
+      Dir.mkdir @home
+    end
+    
+    @json  = { id: u, type: 'post' }
   end
-  def menu *m
-    if m[0]
-      mn = Menu.new(m[0])
+
+  def type t
+    @json[:type] = t
+  end
+  
+  def file *f
+    if f[1]
+      File.open("#{@home}/#{f[0]}", 'w') { |ff| ff.write(f[1]) }
     else
-      mn = { term: "/?net=#{@id}&id=#{@id}", bingo: "/bingo?user=#{@id}" }
+      File.read("#{@home}/#{f[0]}")
+    end
+  end
+
+  def exist? f
+    if File.exist? "#{@home}/#{f}"
+      return true
+    else
+      return false
+    end
+  end
+  
+  def mkdir d
+    Dir.mkdir "#{@home}/#{d}"
+  end
+  
+  def pwd
+    Dir.pwd.gsub(@home,'');
+  end
+  
+  def ls *p, &b
+    if p[0]
+      pa = "#{@home}/#{p[0]}"
+    else
+      pa = "#{@home}/*"
+    end
+    a = []
+    Dir[pa].each {|e| a << e.gsub(@home,'') }
+    if block_given?
+      a.each {|e| b.call(e) }
+    else
+      return a
+    end
+  end
+
+  def link k, v
+    return %[<a class='menu link' href='#{v}'>#{k}</a>]
+  end
+  
+  def icon k, v
+    return %[<a class='menu material-icons button' href='#{v}'>#{k}</a>]
+  end
+  
+  
+  def menu *m
+    if m[1]
+      mn = Menu.new(m[1])
+    else
+      if m[0] == :icon
+        mn = { terminal: "/?net=#{@id}&id=#{@id}", flag: "/bingo?user=#{@id}" }
+      else
+        mn = { term: "/?net=#{@id}&id=#{@id}", bingo: "/bingo?user=#{@id}" }
+      end
     end
     o = []
-    mn.each_pair {|k,v| o << %[<a class='menu' href='#{v}'>#{k}</a>] }
+    mn.each_pair {|k,v|
+      if m[0] == :icon
+        o << icon(k,v)
+      else
+        o << link(k,v)
+      end
+    }
     return o.join("");
   end
+  
   def id
     @id
   end
+  
   def dev
     Z4::DEV
   end
+  
   def erb k
     return ERB.new(k).result(binding)
   end
+  
   def run i
     if m = /(.+): (.*)/.match(i)
       ii = [ m[1], m[2] ]
@@ -101,13 +174,19 @@ class App < WEBrick::HTTPServlet::AbstractServlet
       @view = :index
     end
     Z4.db('/')[@params['net']] = @params['client']
+    
     puts %[[GET] #{@path} #{@query} #{@host} #{@params} #{@type}]
+  end
+
+  def erb k, h={}
+    ERB.new(File.read("views/#{k}.erb")).result(h[:binding] ||binding)
   end
   
   def do_GET request, response
     get_env(request)
     response.status = 200
     response['Content-Type'] = @type
+    @db = Z4.db(@host)
     response.body = ERB.new(HTML.view(@view)).result(binding)
   end
   
