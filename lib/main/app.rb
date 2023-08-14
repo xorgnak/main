@@ -19,7 +19,7 @@ class Run
     if m[0]
       mn = Menu.new(m[0])
     else
-      mn = { term: "/?net=#{@id}&id=#{@id}", bingo: "/bingo?user=#{id}" }
+      mn = { term: "/?net=#{@id}&id=#{@id}", bingo: "/bingo?user=#{@id}" }
     end
     o = []
     mn.each_pair {|k,v| o << %[<a class='menu' href='#{v}'>#{k}</a>] }
