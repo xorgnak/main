@@ -117,7 +117,7 @@ connect();
 <% end %>
 
 function send() {
-    h = { input: $('#input').val(), net: params.net };
+    h = { input: $('#input').val(), net: params.net, id: params.id };
     $('#input').val('');
     $.post('/', h, function(data) {
 	console.log('[SEND]', data);
