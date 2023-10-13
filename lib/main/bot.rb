@@ -279,12 +279,15 @@ Bot.on('#i') do |e,h|
       a << %[#{e}]
     end
   }
-  o, oo = [], []
+  o = []
+  [h[:users]].flatten.each do |e|
+    u = Z4.db(:user, e, h[:chan]);
+    o << %[--[#{e}] https://propedicab.com/menu?user=#{e}&chan=#{h[:chan]}]
+    Bot.fields[:user].each { |e| o << %[#{ee}: #{u[ee]}] }
+  end
+  o << %[--[YOU] https://propedicab.com/menu?user=#{h[:user]}&chan=#{h[:chan]}]
   Bot.fields[:user].each { |e| o << %[#{e}: #{user[e]}] }
-  o << oo.join(', ')
-  Bot.fields[:shop].each { |e| if "#{user[e]}".length > 0; o << %[your #{e} is #{user[e]}. ]; end }
-  o << %[]
-  o << %[url: https://propedicab.com/menu?user=#{h[:user]}&chan=#{h[:chan]}]
+  Bot.fields[:shop].each { |e| if "#{user[e]}".length > 0; o << "#{e}: [X]"; else; o << "#{e}: [ ]"; end }
   e.respond(o.join("\n"))
 end
 
