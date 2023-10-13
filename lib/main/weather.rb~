@@ -1,0 +1,18 @@
+class Weather
+  def initialize
+    @client = OpenWeather.new(api_key: ENV['OPENWEATHER_API_KEY'])
+  end
+  def now h={}
+    @client.current_weather(h)
+  end
+  def one h={}
+    @client.one_call(h)
+  end
+end
+
+module Z4
+  @@WEATHER = Weather.new
+  def weather
+    @@WEATHER
+  end
+end

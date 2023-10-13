@@ -1,0 +1,24 @@
+class AI
+  def initialize
+    @client = HuggingFace::InferenceApi.new(api_token: ENV['HUGGING_FACE_API_TOKEN'])
+  end
+  def ask q, c
+    @client.question_answering( question: q, context: c )
+  end
+  def generate i
+    @client.text_generation(input: i)
+  end
+  def summary i
+    @client.summarization(input: i)
+  end
+  def embed *a
+    @client.embedding(input: [a].flatten )
+  end
+end
+
+module Z4
+  @@AI = AI.new
+  def self.ai
+    @@AI
+  end
+end

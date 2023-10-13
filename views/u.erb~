@@ -1,0 +1,31 @@
+<style>
+#head { width: 100%; text-align: center; }
+
+#foot { position: fixed; bottom: 0; width: 100%; text-align: center; }
+</style>
+
+<% @user = Z4.db(:user, @params['user'], @params['chan']); %>
+<% @chan = Z4.db(:chan, @params['chan']); %>
+
+<img id='bg' src='<%= @user['img'] %>'>
+
+<h1 id='head'>
+
+
+<% { 'phone' => 'call', 'store' => 'storefront', 'channel' => 'channel' }.each_pair do |key,icon|  %>
+<% if "#{@user[key]}".length > 0 %>
+<a class='material-icons btn' href='<%= @user[key] %>'><%= icon %></a>
+<% end %>
+<% end %>
+<span id='name'><%= @user['name'] %></span>
+</h1>
+
+<div id='foot'>
+<% if "#{@user['embed']}".length > 0 %>
+<%= @user['embed'] %>
+<% end %>
+
+<% if "#{@user['title']}".length > 0 %>
+<h4><span id='title'><%= @user['name'] %></span></h4>
+<% end %>
+</div>

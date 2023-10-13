@@ -1,163 +1,274 @@
-module Z4
-  def dev
-    DEV
+
+class Dev
+  def initialize d
+    @rt = false
+    @pipe = false
+    @buf = "";
+    @d = d
+    @prog = []
+    Process.detach( fork { loop { puts @d.readline } })
   end
-  module DEV
-    def self.set k,v
-      if v.class == String
-        s = "#{k} = '#{v}'; io(1, '--[#{k}] #{v}'); ";
-      else
-        s = "#{k} = #{v}; io(1, '--[#{k}] #{v}'); ";
-      end
-      self.input(s);
-    end
-
-    def self.cmd(r, m, *a)
-      as = [a].flatten
-      if as.length > 0
-        aa = []; as.each do |e|
-          case
-          when e.class == String
-            aa << %["#{e}"]
-          else
-            aa << e
-          end
-        end
-        s = "#{r}(#{m},#{aa.join(',')}); "
-      else
-        s = "#{r}(#{m}); "
-      end
-      self.input(s)
-      return nil
-    end
-    
-    def self.input i
-      if /.+: .*/.match(i)
-        ii = i.split(": ")
-      else
-        ii = ["/", i]
-      end
-      puts %[input: #{ii}]
-      @@DEVS.each_pair {|k,v|
-        if ENV['BROKER'] != 'localhost' && ENV['BROKER'] != nil
-          v.write(ii[1]);
-          puts %[v.write: #{ii[1]}]
-        end
-      }
-      Z4.emit(topic: "Z4#{ii[0]}", payload: ii[1])
-      puts %[publish: #{ii[0]} #{ii[1]}]
-        
-    end
-    
-    def self.read(f)
-      self.input(%[io(0,''); ev(0, '/#{f}'); io(16, '[event] #{f}'); ]);
-    end
-    
-    def self.write(f, p)
-      self.input(%[io(0, '#{p}'); ev(1, '/#{f}'); ])
-    end
-    
-    def self.ls *a
-      if a[0]
-        [a].flatten.each { |e| self.input("ls(#{e});"); }
-      else
-        self.input("ls();");
-      end
-    end
-    
-    def self.roll h={}
-      hh = []; h.each_pair {|k,v| hh << %[{#{v},#{k}}] }
-      return %[roll({#{hh.join(',')}})]
-    end
-    
-    def self.dice n, s
-      return %[dice(#{n},#{s})]
-    end
-    
-    def self.die s
-      return %[die(#{s})]
-    end
-    
-    def self.meow e, *o
-      if o[0]
-        self.input(%[meow(#{e}, #{o[0]}); ]);
-      else
-        self.input(%[meow(#{e}); ]);
-      end
-    end
-    
-    def self.date()
-      self.input("date();");
-    end
-    
-    def self.ok()
-      self.input("ok();");
-    end
-
-    def self.hi()
-      self.input("hi();");
-    end
-    
-    def self.z4 m, *a
-      self.cmd "z4", m, a
-    end
-    
-    def self.t h={}
-      ms = h[:ms].to_i
-      s = (h[:s].to_i * 1000)
-      m = (h[:m].to_i * (60 * 1000))
-      h = (h[:h].to_i * ((60 * 1000) * 60))
-      return ms + s + m + h
-    end
-    
-    def self.at h = {}
-      a = []; h.each_pair {|k, v| a << %[at(#{k},'#{v}'); ] }
-      self.input(a.join(""));
-    end
-    
-    def self.nm m, *a
-      self.cmd "nm", m, a
-    end
-    
-    def self.io m, *a
-      self.cmd "io", m, a
-    end
-    
-    def self.event m, *a
-      self.cmd "ev", m, a
-    end
-    
-    def self.beacon n
-      self.set "beacon", n
-    end
-    
-    def self.network k
-      self.set "net", k
-    end
-    
-    def self.device k
-      self.set "dev", k
-    end
-
-    def self.devices
-      @@DEVS.keys.length
-    end
-
-    @@DEVS = Hash.new do |h,k|
-      #      d = Serial.new(port: k, baud: 115200)
-      #      Process.detach(fork {
-      #                       while(o = d.gets) { o.split("\n").each { |e| puts "#{e.strip}" } }
-      #                     });
-      #      h[k] = d
-      h[k] = Net::Telnet.new('Host' => '192.168.4.1', 'Timeout' => 10, 'Prompt' => /[$%#>] \z/n)
-      h[k].cmd("hi(); ")
-    end
-    #Dir['/dev/ttyUSB*'].each { |e| @@DEVS[e] }
-    def self.[] k
-      @@DEVS[k]
-    end
+  # interactive?
+  def rt= s
+    @rt = s
   end
-  include DEV
-#  DEV.hi();
+
+  # store?
+  def pipe= s
+    @pipe = s
+  end
+
+  # prog builder
+  def repl!
+    if @rt == true
+      self.<< @buf
+    end
+    if @pipe == true
+      @prog << @buf
+    end
+    b = @buf;
+    @buf = "";
+    return b
+  end
+
+  # dump prog into buffer
+  def run!
+    self.<< @prog
+  end
+
+  # prog object
+  def prog
+    @prog
+  end
+
+  # buffer pipe to output
+  def raw i
+    o = []
+    [i].flatten.each { |e| o << %[#{e}] }
+    return o.join("")
+  end
+  
+  # buffer pipe
+  def << i
+    [i].flatten.each { |e| @d.write(%[#{e}\n\r]); }
+  end
+  
+  # time offset generator
+  def t h={}
+    tt = 0
+    tt += h[:ms].to_i
+    tt += h[:s].to_i * 1000
+    tt += h[:m].to_i * (60 * 1000)
+    tt += h[:h].to_i * (60 * (60 * 1000))
+    return tt
+  end
+
+  # system tool
+  def me *n
+    if n[0]
+      @buf = %[me(#{n[0]});]
+    else
+      @buf = %[me(0);] 
+    end
+    repl!
+  end
+
+  # fork event; pool by timer
+  def spawn e, *t
+    if t[0]
+      tt = t[0]
+    else
+      tt = 0
+    end      
+    if e.class == Symbol
+      ee = "'/#{e}'"
+    else
+      ee = "'#{e}'"
+    end
+    @buf = %[spawn(#{ee},#{tt});]
+    repl!
+  end
+  
+  # event reader
+  def cat e, *t
+    if t[0]
+      tt = ", '#{t[0]}'"
+    else
+      tt = ''
+    end
+    if e.class == Symbol
+      @buf = %[cat('/#{e}'#{tt});]
+    else
+      @buf = %[cat('#{e}'#{tt});]
+    end
+    repl!
+  end
+
+  # print wrapper
+  def meow i, *n
+    if n[0]
+      nn = n[0];
+    else
+      nn = 0;
+    end
+    if i.class == Symbol
+      @buf = %[meow(#{i},#{nn});];
+    else
+      @buf = %[meow('#{i}',#{nn});];
+    end
+    repl!
+  end
+  
+  # setTimeout
+  def at t, c
+    @buf = %[at(#{t},"#{c}");]
+    repl!
+  end
+
+  # set and trigger events
+  def on ev, *b
+    if ev.class == Symbol
+      evv = %['/#{ev}']
+    else
+      evv = %['#{ev}']
+    end
+    if b[0]
+      @buf = %[on(#{evv},"#{b[0]}");]
+    else
+      @buf = %[on(#{evv});]
+    end
+    repl!
+  end
+  
+  # list events and collections
+  def ls *c
+    if c[0]
+      if c[0].class == Symbol
+        evv = %['/#{c[0]}']
+      else
+        evv = %['#{c[0]}']
+      end
+      @buf = %[ls(#{evv});];
+    else
+      @buf = %[ls();];
+    end
+    repl!
+  end
+  
+  # network manager
+  def nm m, *a
+    if a[0]
+      ssid = %[,'#{a[0]}']
+    else
+      ssid = %[]
+    end
+    if a[1]
+      pwd = %[,'#{a[1]}']
+    else
+      pwd = %[]
+    end
+    @buf = %[nm(#{m}#{ssid}#{pwd});]
+    repl!
+  end
+  
+  # ok state
+  def ok!
+    @buf = %[ok();\n\r];
+    repl!
+  end
+  
+  # hi event
+  def hi!
+    @buf = %[hi();\n\r];
+    repl!
+  end
 end
 
+
+class DevProg
+  def initialize d
+    @dev = d
+    # cmd; cmd; cmd;
+    @buf = []
+    # event => cmd; cmd; cmd;
+    @es = Hash.new { |h,k| h[k] = [] }
+  end
+
+  def buffer
+    @buf
+  end
+  def events
+    @es
+  end
+  
+  # raw event getter and setter
+  def [] k
+    @es[k].join(" ")
+  end
+  def []= k,v
+    @es[k] = v
+  end
+
+  # dump buffer to event
+  def event e
+    @es[e] = @buf
+    @buf = []
+  end
+
+  # access to underlying device object
+  def cmd
+    @dev
+  end
+
+  # append cmd to buffer
+  def << i
+    @buf << i 
+  end
+
+  # write program to device
+  def write!
+    @dev.rt = true
+    @es.each_pair { |k,v| @dev.on(k,v.join(" ")) }
+    @dev << %[ok();]
+    @dev.rt = false
+  end
+end
+
+Dir['/dev/ttyUSB*'].each { |e|
+  if d = SerialPort.new(e, 115200, 8, 1, SerialPort::NONE);
+    puts "[DEV] #{e}"
+    @dev = DevProg.new(Dev.new(d))
+  end
+}
+
+if @dev
+
+@dev[:info] = [ @dev.cmd.me(1), @dev.cmd.me(2), @dev.cmd.me(3), @dev.cmd.raw(%[meow('net: ' .. net);]), @dev.cmd.raw(%[meow('dev: ' .. dev, 2);]) ]
+@dev[:hi] = [ @dev.cmd.raw(%[spawn('/info',0);]) ]
+@dev[:welcome] = [ %[play(4,4,2); play(4,4,2); play(5,7,3); play(5,1,2); play(5,1,2); play(4,1,1);] ]
+@dev[:beep] = [ %[play(4,4,4); play(4,4,4); play(4,4,4);] ]
+@dev[:on] = [ %[pin(led,1);] ]
+@dev[:off] = [ %[pin(led,0);] ]
+@dev[:blink] = [ %[pin(led,1);], %[at(t(500,0,0,0), 'pin(led,0)');], @dev.cmd.spawn(:blink, @dev.cmd.t(s: 2)) ]
+@dev[:power] = [ %[flash(3);] ]
+@dev[:cue] = [ %[flash(0);] ]
+@dev[:eq] = [ %[flash(10)] ]
+@dev[:mute] = [ %[dark(1);] ]
+@dev[:mode] = [ %[dark(0);] ]
+@dev[:left] = [ %[pattern(1,0,0,1,0);] ]
+@dev[:right] = [ %[pattern(0,1,0,1,0);] ]
+@dev[:up] = [ %[pattern(1,1,0,1,1);] ]
+@dev[:down] = [ %[pattern(1,1,0,1,0);] ]
+@dev[:rpt] = [ %[rainbow(12);] ]
+@dev[:scn] = [ %[rainbow(1);] ]
+@dev[:zero] = [ %[theme(red,red,red);] ]
+@dev[:one] = [ %[theme(blue,violet,red);] ]
+@dev[:two] = [ %[theme(green,green,purple);] ]
+@dev[:three] = [ %[theme(orange,gold,blue);] ]
+@dev[:four] = [ %[theme(blue,gold,orange);] ]
+@dev[:five] = [ %[theme(green,green,green);] ]
+@dev[:six] = [ %[theme(blue,blue,blue);] ]
+@dev[:seven] = [ %[leds(120,200,5,0);] ]
+@dev[:eight] = [ %[leds(60,90,5,0);] ]
+@dev[:nine] = [ %[leds(15,60,5,0);] ]
+end

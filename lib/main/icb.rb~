@@ -1,0 +1,52 @@
+
+module ICB
+  class PKT
+    def initialize pkt
+      @content = pkt[0];
+      @protocol = pkt[1][0];
+      @port = pkt[1][1];
+      @from = pkt[1][2];
+      @dest = pkt[1][3];
+    end
+    def protocol
+      @protocol
+    end
+    def port
+      @port
+    end
+    def from
+      @from
+    end
+    def dest
+      @dest
+    end
+    def content
+      @content
+    end
+  end
+  
+  class Server
+    def initialize h={}
+      @socket = UDPSocket.new(Socket::AF_INET6)
+      @socket.bind('0.0.0.0',h[:port]);
+      @buffer = Hash.new { |h,k| h[k] = [] }
+      loop do
+        pkt = PKT.new(@socket.recvfrom(16))
+        @buffer[pkt.from] << pkt.content
+        if @buffer[pkt.from][-1] == "END"
+          @socket.send(@buffer[pkt.from].join(''),0,pkt.dest,pkt.port);
+        end
+      end
+    end
+  end
+  class Client
+    def initialize h={}
+      @socket = UDPSocket.new(Socket::AF_INET6)
+      @socket.connect(h[:host],h[:port]);
+      loop do
+        pkt = PKT.new(@socket.recvfrom(16)
+        puts "#{pkt}"
+      end
+    end
+  end
+end

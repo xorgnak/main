@@ -1,0 +1,56 @@
+
+class Group
+  def initialize h
+    @host = h
+    @db = Z4.db("group:#{h}")
+    @i = @db.dictionary[:pool]
+  end
+  def [] k
+    @i.incr(:profiles, k)
+    Profile.new(k)
+  end
+end
+
+class Profile
+  def initialize u
+    @user = u
+    @db = Z4.db("user:#{u}")
+    @i = @db.dictionary[:interests]
+  end
+  def [] k
+    @i.incr(:profiles, @user)
+    Interest.new(k)
+  end
+  def to_h
+    @db.to_h
+  end
+end
+
+class Interest
+  def initialize i
+    @interest = i
+    @db = Z4.db("interest:#{i}")
+    @i = @db.dictionary[:profiles]
+  end
+  def incr k, v
+    @i.incr(k,v)
+  end
+  def decr k, v
+    @u.decr(k,v)
+  end
+  def to_h
+    @db.to_h
+  end
+end
+
+module Z4
+  def self.profile(u)
+    Profile.new(u)
+  end
+  def self.match(p, *u)
+    h = {}
+    @p = Z4.profile(p)
+    u.each { |e| x = Z4.profile(e); h[e] = x.to_h }
+    
+  end
+end

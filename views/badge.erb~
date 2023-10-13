@@ -1,0 +1,2 @@
+<% @user = Z4.db(:user, @params['user'], @params['chan']) %>
+<%= @user.to_h %>

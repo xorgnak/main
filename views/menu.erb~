@@ -1,0 +1,8 @@
+<style>
+.nav { text-decoration: none; color: black; }
+</style>
+<div style='width: 100%; text-align: center;'>
+<% [:profile, :badge].each do |e| %>
+<a href='https://propedicab.com/<%= e %>?user=<%= @params['user'] %>&chan=<%= @params['chan'] %>'></a>
+<% end %>
+</div>

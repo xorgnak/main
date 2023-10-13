@@ -1,18 +1,59 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    activesupport (7.1.0)
+      base64
+      bigdecimal
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      connection_pool (>= 2.2.5)
+      drb
+      i18n (>= 1.6, < 2)
+      minitest (>= 5.1)
+      mutex_m
+      tzinfo (~> 2.0)
+    base64 (0.1.1)
+    bigdecimal (3.1.4)
+    concurrent-ruby (1.2.2)
+    connection_pool (2.4.1)
+    drb (2.1.1)
+      ruby2_keywords
+    faraday (2.7.11)
+      base64
+      faraday-net_http (>= 2.0, < 3.1)
+      ruby2_keywords (>= 0.0.4)
+    faraday-multipart (1.0.4)
+      multipart-post (~> 2)
+    faraday-net_http (3.0.2)
+    hashie (5.0.0)
+    hugging-face (0.3.4)
+      faraday (>= 1.0)
+    i18n (1.14.1)
+      concurrent-ruby (~> 1.0)
     json (2.6.3)
+    minitest (5.20.0)
+    multipart-post (2.3.0)
+    mutex_m (0.1.2)
     net-telnet (0.2.0)
+    open-weather-ruby-client (0.4.0)
+      activesupport
+      faraday (>= 2.0.1)
+      faraday-multipart
+      hashie
     paho-mqtt (1.0.12)
     pstore (0.1.2)
+    ruby2_keywords (0.0.5)
+    tzinfo (2.0.6)
+      concurrent-ruby (~> 1.0)
     webrick (1.8.1)
 
 PLATFORMS
   armv7l-linux-eabihf
 
 DEPENDENCIES
+  hugging-face
   json
   net-telnet
+  open-weather-ruby-client
   paho-mqtt
   pstore
   webrick

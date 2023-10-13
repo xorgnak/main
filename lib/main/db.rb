@@ -121,20 +121,22 @@ module Z4
       @db.transaction {|db| x = JSON.parse(db[h] || '{}'); x[k] = v; db[h] = JSON.generate(x); }
     end
     def incr h, k, *v
+      kk = k.to_s
       if v[0]
         n = v[0]
       else
         n = 1
       end
-      @db.transaction {|db| x = JSON.parse(db[h] || '{}'); x[k] = x[k].to_i + n; db[h] = JSON.generate(x); }
+      @db.transaction {|db| x = JSON.parse(db[h] || '{}'); xx = x[kk].to_i; x[kk] = xx + n; db[h] = JSON.generate(x); }
     end
     def decr h, k, *v
+      kk = k.to_s
       if v[0]
         n = v[0]
       else
         n = 1
       end
-      @db.transaction {|db| x = JSON.parse(db[h] || '{}'); x[k] = x[k].to_i - n; db[h] = JSON.generate(x); }
+      @db.transaction {|db| x = JSON.parse(db[h] || '{}'); xx = x[kk].to_i; x[kk] = xx - n; db[h] = JSON.generate(x); }
     end
     def raw
       h = {}
@@ -146,6 +148,9 @@ module Z4
   class DbColl
     def initialize *t
       @db = PStore.new("db/#{t.join('-')}-coll.pstore")
+    end
+    def keys
+      @db.transaction {|db| return db.keys }
     end
     def has_key? k
       @db.transaction {|db| return db.key? k }

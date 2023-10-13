@@ -1,3 +1,5 @@
+
+
 <script
   src="https://code.jquery.com/jquery-3.7.0.min.js"
   integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
@@ -10,6 +12,9 @@
 	integrity="sha512-Y5n0fbohPllOQ21fTwM/h9sQQ/1a1h5KhweGhu2zwD8lAoJnTgVa7NIrFa1bRDIMQHixtyuRV2ubIx+qWbGdDA=="
 	crossorigin="anonymous"
 	referrerpolicy="no-referrer"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery.qrcode@1.0.3/jquery.qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -121,11 +126,12 @@ connect();
 <% end %>
 
 function send() {
-    h = { input: $('#input').val(), net: params.net, id: params.id };
+    h = { input: $('#input').val(), chan: params.chan, user: params.user, net: params.net, id: params.id };
     $('#input').val('');
-    $.post('/', h, function(data) {
-	console.log('[SEND]', data);
-	if (data.output != '') {
+    console.log("[send]", h);
+    $.post('/json', h, function(data) {
+	console.log('[recv]', data);
+	if (data.output !== '' ) {
 	  display(data.type, '<code>' + data.output + '</code>');
 	}
     });

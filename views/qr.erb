@@ -1,0 +1,10 @@
+<h1 style='width: 100%; text-align: center; padding: 0; margin: 0;'><%= @params['user'] %></h1>
+<div style='width: 100%; text-align: center; background-color: white; padding: 2% 0 2% 0;'>
+<div id='qr'></div>
+</div>
+<h1 style='width: 100%; text-align: center; padding: 0; margin: 0;'><%= @params['group'] %></h1>
+<script>
+$(document).ready(function() {
+$('#qr').qrcode("https://<%= @host %>/<%= @params['do'] %>?user=<%= @params['user'] %>&group=<%= @params['group'] %>");
+});
+</script>

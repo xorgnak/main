@@ -1,0 +1,25 @@
+<script>
+    $(document).on('click', '#add_interest', function() {
+	var i = "interest('" + $('#input').val() + "', '" + params.user + "', '" + params.chan + "'); ";
+	h = { input: i, chan: params.chan, user: params.user };
+	$('#input').val('');
+	console.log("[send]", h);
+	$.post('/', h, function(data) {
+	    window.location = window.location;
+	});
+    });
+</script>
+
+<h1 style='width: 100%; text-align: center;'><%= @params['chan'] %></h1>
+
+<% @interests = Z4.group(@params['chan']) %>
+<% @profile = Z4.profile(@params['user'], @params['chan'].to_sym).to_h %>
+
+<% @profile.each_pair do |k,v| %>
+<h3><input type='number' name='<%= k %>_value' value='<%= v %>' maxlength='2' style='width: 10%;'><span><%= k %></span></h3>
+<% end %>
+
+<h1 style='width: 100%; text-align: center;'>
+<input id='input' name='interest' list='interests' placeholder='interest' style='font-size: x-large; vertical-align: middle;'>
+<button id='add_interest' class='material-icons' style='vertical-align: middle;'>add</button>
+</h1>

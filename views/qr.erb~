@@ -1,0 +1,5 @@
+<canvas id='qr'></canvas>
+
+<script>
+$('#qr').qrcode("https://<%= @host %>/<%= @params['do'] %>?id=<%= @params['id'] %>");
+</script>

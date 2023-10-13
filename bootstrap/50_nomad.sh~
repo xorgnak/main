@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo echo '(screen -Dr || screen)' > /usr/bin/nomad
