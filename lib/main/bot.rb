@@ -280,14 +280,25 @@ Bot.on('#i') do |e,h|
     end
   }
   o = []
-  [h[:users]].flatten.each do |e|
-    u = Z4.db(:user, e, h[:chan]);
-    o << %[--[#{e}] https://propedicab.com/menu?user=#{e}&chan=#{h[:chan]}]
-    Bot.fields[:user].each { |ee| o << %[#{ee}: #{u[ee]}] }
+  [h[:roles]].flatten.each do |e|
+
   end
-  o << %[--[YOU] https://propedicab.com/menu?user=#{h[:user]}&chan=#{h[:chan]}]
-  Bot.fields[:user].each { |e| o << %[#{e}: #{user[e]}] }
-  Bot.fields[:shop].each { |e| if "#{user[e]}".length > 0; o << "#{e}: [X]"; else; o << "#{e}: [ ]"; end }
+  @ic = { 'phone' => ":call_me:", 'store' => ":convenience_store:", 'social' => ":mega:",
+          'embed' => ":alembic:", 'tips' => ":moneybag:", 'img' => ":frame_photo:"  }
+  oo = []
+  [h[:users]].flatten.each do |e|
+    oo.clear
+    u = Z4.db(:user, e, h[:chan]);
+    Bot.fields[:shop].each { |e| if "#{u[e]}".length > 0; oo << "#{@ic[e]}"; end }
+    o << %[--[#{e}] #{oo.join(' ')}]
+    Bot.fields[:user].each { |ee| o << %[#{ee}: #{u[ee]}] }  
+  end
+  
+  oo.clear
+  Bot.fields[:shop].each { |e| if "#{user[e]}".length > 0; oo << "#{@ic[e]}"; end }
+  o << %[+-[[YOU]] #{oo.join(' ')}]
+  Bot.fields[:user].each { |e| o << %[| #{e}: #{user[e]}] }
+  o << %[+-[NAVAGATOR] https://propedicab.com/menu?user=#{h[:user]}&chan=#{h[:chan]}]
   e.respond(o.join("\n"))
 end
 
