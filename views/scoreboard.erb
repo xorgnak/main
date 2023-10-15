@@ -1,0 +1,11 @@
+<% @user = Z4.db(:user, @params['user'], @params['chan']); %>
+<% @chan = Z4.db(:chan, @params['chan']); %>
+<!-- <code><%= @user.to_h %></code> -->
+<% @game = @user.dictionary[:games].raw %>
+
+<% @game.each_pair do |k,v| %>
+<h3><%= k %></h3>
+<% v.each_pair do |kk,vv| %>
+<p><%= kk %>: <%= vv  %></p>
+<% end %>
+<% end %>

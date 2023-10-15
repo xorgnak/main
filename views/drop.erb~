@@ -1,0 +1,7 @@
+<div>
+<h1>
+<input placeholder='drop'>
+<button class='material-icons'>add</button>
+</h1>
+<textarea placeholder='for...'></textarea>
+</div>

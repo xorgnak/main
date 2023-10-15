@@ -164,5 +164,28 @@ $(document).on('change', '#input_method', function(ev) {
     $('#' + $('#input_method').val()).show();
 });
 
+var watchID;
+
+  if (!navigator.geolocation) {
+      console.log('[GPS] failed.');
+  } else {
+      function gps_success(position) {
+	  $('#latitude').text(position.coords.latitude);
+	  $('#longitude').text(position.coords.longitude);
+      }
+
+      function gps_error() {
+	  alert("Sorry, no position available.");
+      }
+
+      const gps_options = {
+	  enableHighAccuracy: true,
+	  maximumAge: 30000,
+	  timeout: 27000,
+      };
+
+//      watchID = navigator.geolocation.watchPosition(gps_success, gps_error, gps_options);
+  }
+
 </script>
     

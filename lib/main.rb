@@ -32,6 +32,8 @@ require_relative 'main/match'
 
 require_relative 'main/weather'
 
+require_relative 'main/game'
+
 require_relative 'main/app'
 
 require_relative 'main/logic'

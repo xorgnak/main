@@ -1,16 +1,15 @@
 <style>
-a { text-decoration: none; color: white; min-width: 80%; box-shadow: 2px 2px gold; padding: 0 2% 0 2%; margin: 1% 2% 1% 2%; }
+a { text-decoration: none; color: white; padding: 0 2% 0 2%; margin: 1% 2% 1% 2%; border: thin solid white; border-radius: 10px; }
 h1 { width: 100%; }
 </style>
-<h1 style='width: 100%; text-align: center; background-color: white; color: black;'>MENU</h1>
-<div style='width: 100%; text-align: center; overflow-y: scroll;'>
-<% {
-badge: "your qr badge.",
-scoreboard: "game info",
-profile: "your interests."
-}.each_pair do |k,v| %>
-<div style='width: 100%; text-align: left;'>
-<h1><a href='/<%= k %>?user=<%= @params['user'] %>&chan=<%= @params['chan'] %>'><%= k %></a><%= v %></h1>
-</div>
+<h1 style='width: 100%; text-align: center; background-color: white; color: black;'>NAVAGATOR</h1>
+
+<h3 style='width: 100%; text-align: center;'>
+<% [:badge,:scoreboard,:profile,:u].each do |e| %>
+<a href='/<%= e %>?user=<%= @params['user'] %>&chan=<%= @params['chan'] %>'><%= e %></a>
 <% end %>
-</div>
+</h3>
+
+<%= erb :drop %>
+
+<%= erb :gps %>

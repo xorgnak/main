@@ -1,0 +1,11 @@
+class Game
+  def initialize g, h={}
+    @game = Z4.db(:game, g);
+    @games = @game.collection[:games]
+    h.each_pair { |k,v| @game[k] = v }
+  end
+
+  def to_h
+    @game.to_h
+  end
+end

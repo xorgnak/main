@@ -1,0 +1,8 @@
+<% @user = Z4.db(:user, @params['user'], @params['chan']); %>
+<% @chan = Z4.db(:chan, @params['chan']); %>
+<% @games = user.dictionary.keys do |e| %>
+<% if /game:/.match(e) %>
+<%= JSON.generate(e) %>
+<% end %>
+<%  %>
+<% end %>
